@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "board.dao.BoardDao">
+	<select id = "totalCountOfBoard" resultType="int">
+		select count(*) from board
+	</select>
+	<select id = "pagingListOfBoard" parameterType = "Map" resultType = "bdto">
+		select * from board order by idx desc limit #{start}, #{perpage}
+	</select>
+	<insert id = "insertOfBoard" parameterType="bdto">
+		insert into board (num, subject, content, images, writeday) values
+		(#{num}, #{subject}, #{content}, #{images}, now())
+	</insert>
+</mapper>

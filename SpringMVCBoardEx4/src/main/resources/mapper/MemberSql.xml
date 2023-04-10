@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "board.dao.MemberDao">
+	<select id = "totalCountOfMember" resultType = "int">
+		select count(*) from member
+	</select>
+	<insert id = "insertMember" parameterType = "mdto">
+		insert into member (name, photo, email, pass, hp, gaipday) values
+		(#{name}, #{photo}, #{email}, #{pass}, #{hp}, now())
+	</insert>
+	<select id = "selectAllOfMember" resultType = "mdto">
+		select * from member order by num
+	</select>
+	<delete id = "deleteMember" parameterType = "int">
+		delete from member where num=#{num}
+	</delete>
+	<select id = "isEqualEmail" parameterType = "String" resultType = "int">
+		select count(*) from member where email=#{email} 
+	</select>
+	<select id = "isEqualPassEmail" parameterType = "Map" resultType = "int">
+		select count(*) from member where email=#{email} and pass=#{pass} 
+	</select>
+	<select id = "selectOneOfEmail" parameterType = "String" resultType="mdto">
+		select * from member where email=#{email}
+	</select>
+	<select id = "selectOneOfNum" parameterType = "int" resultType="mdto">
+		select * from member where num=#{num}
+	</select>
+	<update id = "updateMember" parameterType = "mdto">
+		update member set name=#{name}, photo=#{photo}, pass=#{pass}, hp=#{hp} where num=#{num}
+	</update>
+</mapper>
