@@ -112,15 +112,19 @@ public class MemberController {
 		System.out.println(realFolder);
 		// 사진 업로드
 		String photo = upload.getOriginalFilename();// 업로드한 파일명
-
-		try {
-			upload.transferTo(new File(realFolder + "/" + photo));
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(photo.equals("")) {
+			dto.setPhoto(null);
+		}
+		else {
+			try {
+				upload.transferTo(new File(realFolder + "/" + photo));
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		dto.setPhoto(photo);

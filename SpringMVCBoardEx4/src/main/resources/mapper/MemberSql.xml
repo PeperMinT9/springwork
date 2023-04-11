@@ -27,6 +27,10 @@
 		select * from member where num=#{num}
 	</select>
 	<update id = "updateMember" parameterType = "mdto">
-		update member set name=#{name}, photo=#{photo}, pass=#{pass}, hp=#{hp} where num=#{num}
+		update member set name=#{name},
+		<if test = "photo != null">
+		photo=#{photo},
+		</if>
+		pass=#{pass}, hp=#{hp} where num=#{num}
 	</update>
 </mapper>

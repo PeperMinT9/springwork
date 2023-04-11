@@ -40,10 +40,15 @@ public class LoginController {
 		int count = memberDao.isEqualPassEmail(email, pass);
 		//이메일과 비번이 맞는경우 1반환
 		if(count == 1) {
+			session.setMaxInactiveInterval(60 * 60 * 4);
 			//로그인 성공시 세션에 저장하기
 			session.setAttribute("login_ok", "yes");
 			session.setAttribute("login_email", email);
-			session.setAttribute("save_email", save_email == null? "no" : "yes");			
+			session.setAttribute("save_email", save_email == null? "no" : "yes");
+			
+			// 로그인한 사람의 num 값을 얻어서 세션에 저장하자
+			int num = memberDao.selectOneOfEmail(email).getNum();
+			session.setAttribute("login_num", num);
 			
 			return "redirect:../board/list";//로그인 성공시 게시판목록으로 이동
 		}else {

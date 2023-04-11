@@ -52,11 +52,13 @@
 				</tr>
 				<tr>
 					<td colspan = "3" align = "center">
-						<button type = "button" class = "btn btn-outline-success btn-sm"
-						onclick = "location.href = 'updateform?num=${list.num}'"
-						style = "margin-left: 50px;" id = "btn_update">수정</button>
-						<button type = "button" class = "btn btn-outline-success btn-sm"
-						onclick = "delmember(${list.num})">삭제</button>
+						<c:if test = "${login_ok != null and sessionScope.login_email == list.email }">
+							<button type = "button" class = "btn btn-outline-success btn-sm"
+							onclick = "location.href = 'updateform?num=${list.num}'"
+							style = "margin-left: 50px;" id = "btn_update">수정</button>
+							<button type = "button" class = "btn btn-outline-success btn-sm"
+							onclick = "delmember(${list.num})">삭제</button>
+						</c:if>
 					</td>
 				</tr>
 			</table>

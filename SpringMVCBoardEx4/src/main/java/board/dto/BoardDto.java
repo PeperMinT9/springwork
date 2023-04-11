@@ -10,7 +10,25 @@ public class BoardDto {
 	private String images;
 	private int readcount;
 	private Timestamp writeday;
+	private String name;
+	private String photo;
 	
+	public String getName() {
+		return name;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
 	public int getIdx() {
 		return idx;
 	}
