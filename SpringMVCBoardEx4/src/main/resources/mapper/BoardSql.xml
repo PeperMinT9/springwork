@@ -20,4 +20,14 @@
 	<select id = "selectAllData">
 		select * from board
 	</select>
+	<delete id = "deleteBoardOfIdx" parameterType = "int">
+		delete from board where idx=#{idx}
+	</delete>
+	<update id = "updateBoard" parameterType = "bdto">
+		update board set subject=#{subject}, content=#{content}
+		<if test = "images != null">
+			, images=#{images}
+		</if>
+		where idx=#{idx}
+	</update>
 </mapper>

@@ -79,6 +79,10 @@
 							<c:if test= "${dto.images !=  'no'}">
 								<i class="bi bi-images"></i>
 							</c:if>
+							&nbsp;
+							<c:if test = "${dto.acount > 0}">
+								<span style = "color: red; font-size: 0.8em;">[${dto.acount}]</span>
+							</c:if>
 						</a>
 					</td>
 					<td align = "center">${dto.name}</td>

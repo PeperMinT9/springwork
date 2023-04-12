@@ -12,7 +12,17 @@ public class BoardDto {
 	private Timestamp writeday;
 	private String name;
 	private String photo;
+	private int acount; // ´ñ±Û °¹¼öÀúÀå
 	
+	
+	public int getAcount() {
+		return acount;
+	}
+
+	public void setAcount(int account) {
+		this.acount = account;
+	}
+
 	public String getName() {
 		return name;
 	}

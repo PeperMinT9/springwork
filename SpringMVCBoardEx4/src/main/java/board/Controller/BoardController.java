@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import board.dao.AnswerDao;
 import board.dao.BoardDao;
 import board.dao.MemberDao;
 import board.dto.BoardDto;
@@ -33,6 +34,9 @@ public class BoardController {
 	
 	@Autowired
 	BoardDao boardDao;
+	
+	@Autowired
+	AnswerDao answerDao;
 	
 	@GetMapping("/board/form")
 	public String form() {
@@ -151,6 +155,10 @@ public class BoardController {
 					
 			// bdto에 저장
 			bdto.setName(name);
+			
+			// 댓글갯수 acount에 저장
+			int acount = answerDao.getAllAnswer(bdto.getIdx()).size();
+			bdto.setAcount(acount);
 		}
 		
 		// 출력시 필요한 변수들을 model에 모두 저장		
@@ -194,5 +202,78 @@ public class BoardController {
 		model.addAttribute("currentPage", currentPage);
 		
 		return "board/content";
+	}
+	
+	@GetMapping("/board/delete")
+	public String delete(@RequestParam int idx, @RequestParam int currentPage) {
+		// 삭제후 보던 페이지 목록으로 이동
+		boardDao.deleteBoard(idx);
+		
+		return "redirect:list?currentPage=" + currentPage;
+	}
+	
+	@GetMapping("/board/updateform")
+	public String updateForm(Model model, @RequestParam int idx, @RequestParam int currentPage) {
+		// idx에 해당하는 dto 얻기
+		BoardDto dto = boardDao.selectOneBoard(idx);
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("currentPage", currentPage);
+		
+		return "board/updateform";
+	}
+	
+	@PostMapping("/board/updateboard")
+	public String updateBoard(@ModelAttribute BoardDto dto,
+			@RequestParam ArrayList<MultipartFile> upload,
+			@RequestParam int currentPage,
+			HttpServletRequest request) {
+		
+		// 업로드할 경로
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/photo");
+		String images = "";
+		// 사진을 업로드 안했을경우 db에 no라고 저장해보자
+		// 업로드했을경우 파일명을 날짜로 변경해보자
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String fname = sdf.format(new Date());
+		
+		// 업로드를 안한경우
+		if(upload.get(0).getOriginalFilename().equals("")) {
+			images = null; // 기존 사진이 유지된다
+		}
+		else {
+			int i = 0;
+			for(MultipartFile mfile: upload) {
+				String originalName = mfile.getOriginalFilename();
+				// . 를 기준으로 나눠보자(사진에 .사용 비허용)
+				StringTokenizer st = new StringTokenizer(originalName, ".");
+				String fileName = st.nextToken();
+				String extName = st.nextToken();
+				System.out.println(fileName + ", " + extName);
+				
+				// 파일명을 날짜로 변경하기(뒤에 인덱스 붙이기)
+				fileName = fname + "_" + i++ + "." + extName;
+				System.out.println(fileName); // 업로드할 최종 파일명
+				
+				images += fileName + ",";
+				
+				// 사진 업로드
+				try {
+					mfile.transferTo(new File(realPath + "/" + fileName));
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		// dto에 photo값 저장
+		dto.setImages(images);
+		
+		// db 수정
+		boardDao.updateBoard(dto);
+		
+		// 내용보기
+		return "redirect:content?idx=" + dto.getIdx() + "&currentPage=" + currentPage;
 	}
 }

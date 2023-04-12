@@ -2,6 +2,8 @@ package board.dto;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class AnswerDto {
 	private int seq;
 	private int idx;
@@ -9,6 +11,8 @@ public class AnswerDto {
 	private String content;
 	private String name;
 	private String photo;
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
 	private Timestamp writeday;
 	
 	public int getSeq() {
